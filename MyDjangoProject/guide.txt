@@ -1,0 +1,49 @@
+Basically the flow is: project >> app
+
+# To create a basic page with message "Hello World! Welcome": 
+
+1.  Install the required packages: django and djangorestframework. 
+    pip install Django
+
+2.  Cretae a project using command 
+Go to directory and run django-admin command: C:\Users\tiwar\Documents\Python\Python_Learnings_Project\TutedudeAssignments\Assignment9>django-admin startproject myapi
+
+3.  Cretae a app using command & add it in "INSTALLED_APPS" in setting.py
+Go inside project and run python command to add app:  C:\Users\tiwar\Documents\Python\Python_Learnings_Project\TutedudeAssignments\Assignment9\myapi> python manage.py startapp users
+
+After creating an app "user", add it in settings
+
+4. Add the "rest-framework" and application (pt.3) in project >> setting.py >> 
+    INSTALLED_APPS = [
+        'users'
+
+    ]
+
+5. In applications view: 
+	from django.shortcuts import render
+    from django.http import HttpResponse # to send the response
+
+    # Create your views here.
+
+    def index(request):
+        return HttpResponse("Hellow World! Welcome")
+            
+
+6. In urls.py of project: 
+    from django.contrib import admin
+    from django.urls import path, include
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('app/', include("app.urls"))   # Here we are creating a path 127.0.0.1:8000/app/ and next path is configured in app/urls.py file. 
+    ]
+
+7. Create a urls.py in application created: 
+    from . import views
+    from django.urls import path
+
+    urlpatterns = [
+        path('app1', views.index),   # 127.0.0.1:8000/app/app1
+    ]
+
+8. Now run the server: python manage.py runserver and go to website: 127.0.0.1:8000/app/app1

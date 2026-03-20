@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css-file %}
+<link rel="stylesheet" href="{% static 'blogs/app.css' %}">
+{% endblock %}
+
+
+{% block page_title %}
+Our Blog POst Home Page
+{% endblock %}
+
+
+{% block body_conent%}
+<section>
+    <header>
+        <h1>My Personal Blog Post</h1>
+        <h2>I write about python and related stuff</h2>
+        <img src="{% static 'blogs/images/author.jpeg' %}" alt="Author Image"/>
+    </header>
+</section>
+<section>
+    <h2>Featured Posts</h2>
+    <ul>
+        {% for bl in l_blog %}
+            {% include 'blogs/includes/post.html' %}
+        {% endfor %}
+    </ul>
+</section>
+<section>
+    <h2>About The Author</h2>
+    <p>The author is hardworking and is currently trying to learn python.
+    He is looking to do something big.
+    </p>
+    <p>Contact author on contact test@email.com</p>
+</section>
+    <h1>My Personal Blog Post</h1>
+    <h2>I write about python and related stuff</h2>
+{% endblock%}

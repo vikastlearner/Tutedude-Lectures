@@ -1,0 +1,142 @@
+1. To work in this module, install - "pip install opencv-python"
+2. To read the the image:
+    import cv2
+    # URL of image which is to be read.
+    img = cv2.imread('C:/Users/tiwar/Desktop/image1.png')
+
+    cv2.imshow("window", img) # to see the image. The window is name of window.
+    cv2.waitKey(0) # The "0" let the window open, until closed. This is in ms, so 1000 = 1sc.
+    cv2.destroyAllWindows() # to open only the image I wnat to see and close others.
+
+3. TO write the image/save it, append the following line:
+    cv2.imwrite("black_white.png", img) # This will save in same folder, since no path given.
+
+4. To resize the image, append the following changes:
+    print("Dimension:", img.shape) # To know the size of the image.
+    width = img.shape[1]  # If we don't want to change the dimension of width.
+    height = 400 # img.shape[0] =  If we don't want to change the dimension of width.
+    dim = (width, height)
+    resized = cv2.resize(img, dim)
+    cv2.imshow("window", resized) # Here the image name is now "resized"
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+5. Morphological: Erosion, dilution, opening, closing, gradient, tophat and blackhat:
+    import cv2
+    import numpy as np
+
+    img = cv2.imread('C:/Users/tiwar/Desktop/image1.png')
+    width = 500
+    height = 650
+    dim = (width, height)
+    resized = cv2.resize(img, dim)
+    kernel = np.ones((5, 5), dtype=np.uint8)
+    erosion = cv2.erode(resized, kernel, iterations=1) # iteration defines number of time the image shall be eroded.
+    dilation = cv2.dilate(resized, kernel, iterations=1)
+    opening = cv2.morphologyEx(resized, cv2.MORPH_OPEN, kernel)
+    closing = cv2.morphologyEx(resized, cv2.MORPH_CLOSE, kernel)
+    gradient = cv2.morphologyEx(resized, cv2.MORPH_GRADIENT, kernel)
+    tophat = cv2.morphologyEx(resized, cv2.MORPH_TOPHAT, kernel)
+    blackhat = cv2.morphologyEx(resized, cv2.MORPH_BLACKHAT, kernel)
+
+
+    cv2.imshow("Original", resized)
+    cv2.imshow("Blackhat", blackhat)
+    cv2.imshow("Tophat", tophat)
+    cv2.imshow("Gradient", gradient)
+    cv2.imshow("Closing", closing)
+    cv2.imshow("Opening", opening)
+    cv2.imshow("erosion", erosion)
+    cv2.imshow("dilation", dilation)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+6. To flip the image.
+    import cv2
+
+    img = cv2.imread('C:/Users/tiwar/Desktop/image1.png')
+    width = 400
+    height = 550
+    dim = (width, height)
+    resized = cv2.resize(img, dim)
+    cv2.imshow('Original', resized)
+
+    # Horizontal
+    hor = cv2.flip(resized, 0) # Code 0 is for horizontal
+    cv2.imshow('Horizontal', hor)
+
+    # Vertical
+    ver = cv2.flip(resized, 1) # Code 1 is for Vertical
+    cv2.imshow('Vertical', ver)
+
+    # Horizontal and Vertical
+    hor_ver = cv2.flip(resized, -1) # Code 0 is for horizontal
+    cv2.imshow('Hor_Ver', hor_ver)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+7. Scale up or down:
+    import cv2
+
+    img = cv2.imread('C:/Users/tiwar/Desktop/image1.png')
+    print("Dimension of original image: ", img.shape)
+    cv2.imshow("Original Image", img)
+    scale = 150 # to Scale up or down, change the value.
+
+    width = int(img.shape[1] * scale/100)
+    height = int(img.shape[0] * scale/100)
+    dim = (width, height)
+    resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+    # interpolation is used to fill the pixel resized image.
+
+    print("Dimension of resized image: ", resized.shape)
+    cv2.imshow("Resized Image", resized)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+8. Insert image and font:
+    import cv2
+    import numpy as np
+
+    # img = cv2.imread('C:/Users/tiwar/Desktop/image1.png', cv2.IMREAD_COLOR)
+    img = np.zeros((700,700,3), np.uint8)
+
+    cv2.line(img, (10,10), (10,150), (255,0,0), 2)
+    cv2.rectangle(img, (10,20), (150,150), (255,0,0), 2)
+    cv2.circle(img, (300,300), 200, (0,0,255), 5)
+
+    pts_polygon = np.array([[10,170], [100,300], [500, 50], [500,300]], np.int32)
+    cv2.polylines(img, [pts_polygon], True, (0,0,255), 2)
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(img, "Hello", (10,500), font, 2, (0,0,255), 2, cv2.LINE_AA)
+
+    cv2.imshow('image', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+9. Shift image:
+    import cv2
+    import numpy as np
+
+    img = cv2.imread('C:/Users/tiwar/Desktop/image1.png')
+
+    column = img.shape[1]
+    row = img.shape[0]
+
+    s = np.float32([(1, 0, 150), (0,1, 70)])
+
+    shifted = cv2.warpAffine(img, s, (column, row))
+
+    cv2.imshow('Original', img)
+    cv2.imshow('shifted', shifted)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+10. Rotate: Read the file rotate.
+
+
+

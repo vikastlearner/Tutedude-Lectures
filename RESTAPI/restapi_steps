@@ -1,0 +1,107 @@
+# REST API General Steps: 
+
+1.  Install the required packages: django and djangorestframework. 
+    pip install django
+    pip install djangorestframework
+
+2.  Cretae a project using command 
+Go to directory and run django-admin command: C:\Users\tiwar\Documents\Python\Python_Learnings_Project\TutedudeAssignments\Assignment9>django-admin startproject myapi
+
+3.  Cretae a app using command & add it in "INSTALLED_APPS" in setting.py
+Go inside project and run python command to add app:  C:\Users\tiwar\Documents\Python\Python_Learnings_Project\TutedudeAssignments\Assignment9\myapi> python manage.py startapp users
+
+After creating an app "user", add it in settings
+
+4. Add the "rest-framework" and application (pt.3) in project >> setting.py >> 
+    INSTALLED_APPS = [
+        'rest_framework',
+        'users'
+
+    ]
+
+5. In application's views.py, import following modules: 
+    from django.shortcuts import render
+    from rest_framework.response import Response
+    from rest_framework.decorators import APIView
+
+6. Create a class with following details: 
+    class HelloWorldView(APIView):
+        def get(self,request):
+            return Response({'hello':'world'})
+
+7. Add the path in urls.py in Project. 
+    - Import class of view in this file: 
+        from users.views import HelloWorldView
+    - In urlpattern: 
+
+8. Run server to check if path is correct and hellow world is seen: 
+    from application path: "python manage.py runserver"
+    # This run is to verify whether the path is correct and working. 
+
+9. Creating a Database using models. 
+    # import model
+    from django.db import models
+    # Create your models here.
+    class Profile(models.Model):
+        userid = models.CharField(max_length=20, unique=True)
+        username = models.CharField(max_length=50)
+        email = models.EmailField()
+        phone = models.IntegerField(max_length=10)
+        country = models.CharField(max_length=50)
+        bio = models.TextField()
+        created_on = models.DateTimeField(auto_now_add=True)
+    # If you want to see any specific details in admin page, then also add this class
+        def __str__(self): return self.userid
+    
+10. Once created, create a supre user: 
+    python manage createsuperuser
+        username, email, password
+
+11. Run the server and go to 127.0.0.1:8000:/admin >> login using above credential. 
+
+12. Now, add in admin.py the following line and vist pt. 11 again: 
+    from django.contrib import admin
+    from users.models import Profile # import the models' class
+
+    # Register your models here.
+    admin.site.register(Profile)
+
+
+##### Serializer
+13. Using serializer, handle conversion between JSON (API data) and Django model (database objects) in both directions.
+    - Create a file "serializers.py" in app and add following lines: 
+        from rest_framework import serializers
+        from users.models import Profile
+
+        class ProfileSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Profile
+                fields = ('__all__')
+    
+    - In view.py, append following changes: 
+        from users.serializers import ProfileSerializer
+        from rest_framework.viewsets import ModelViewSet #provides built-in CRUD operations (list, create, retrieve, update, delete) for a model.
+        from users.models import Profile
+
+        # To view the GET,POST (CRUD) section in webpage: 
+        class ProfileView(ModelViewSet):
+            queryset = Profile.objects.all() # allows all user to see the profile/content
+            serializer_class = ProfileSerializer # is a fixed DRF attribute that tells the view which serializer to use for data conversion, validation, and saving.
+    - In URLs, do following change: 
+        from rest_framework import routers
+        from users.views import ProfileView
+
+        router = routers.SimpleRouter()
+        router.register('profile', ProfileView) # path: /profile/
+        urlpatterns += router.urls
+
+14. To segregate log page in small pages, add following line below DATABASE = {}
+    REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
+    }
+
+15. To bring the login page for the users OR to bring the security:
+    - Add the following line in path: 
+        path('api-auth/', include('rest_framework.urls'))
+        # since include is used here, in import section: from django.urls import path, include

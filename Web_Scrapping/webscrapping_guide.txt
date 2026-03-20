@@ -1,0 +1,98 @@
+Web Scrapping: This help to read the content of web page.
+Want to retrive data then  Encode (string uni code to byte) and Decode (vice versa) it.
+
+Example:
+1. Install the library: pip install urllib3
+2. create a file "web.py"
+    import urllib.request, urllib.parse, urllib.error # import library to encode and decode
+
+    url = urllib.request.urlopen('http://127.0.0.1:8000/app/app') # to open a link
+    for line in url:
+        print(line.decode().strip())
+3. Run the server and run the above python file.
+4. To import the other details (seen in network section of inspection), install "pip install requests"
+5. create new file webdata.py
+    import requests
+    url = 'http://127.0.0.1:8000/app/app'
+    print(dir(requests)) # prints all data of web page.
+    Example: ['ConnectTimeout', 'ConnectionError', .........]
+
+6. Stating data using dictionary, make changes as below in above file:
+    - Add between url and  print:
+        user = {
+        "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+        }
+    - In response, append "headers = user": "response = requests.get(url=url, headers=user)"
+    - print the response as: "print(response.request.headers)"
+
+7. Downloading the image, you can edit the file webdata:
+    - Create a variable for image url:
+        url = 'http://127.0.0.1:8000/static/blogs/images/python.png'
+    - The user dictionary shall be as it is.
+    - Create a variable to store the response for image content:
+        pic = response.content
+    - To download the image, create a variable and write model it to download.
+        f = open("python.png", "wb")
+        f.write(pic)
+    - After this the file will be downloaded in current path were the webdata.py file is.
+
+8. To see the text file of the webpage (the HTML) code and Response of web(status code, etc)
+    import requests
+    url = 'http://127.0.0.1:8000/allposts'
+    response = requests.get(url= url)
+    print(response.text) # to print the whole coding of html file.
+    # print(response.status_code) # This gives response's status code
+    # print(response.request.headers) # This gives headers details
+
+9. To post like API:
+    - Make a new file "webpost.py" and write the below contents:
+        import requests
+        url = 'http://127.0.0.1:8000/post/'
+        payload = {
+            "title": "Post Webscrapper",
+            "content": "This ie posted from Web scrapper"
+        }
+        response = requests.post(url = url, data = payload, auth = ("admin", "vikas1"))
+        print(response.text) # This shows the response after we posted, that is what is sent
+
+10. To filter the data in webpage:
+    - Need to import two package - bs4 and lxml.
+    - Create a new file and add following line:
+        import requests
+    from bs4 import BeautifulSoup
+
+    def Extract(url):
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+        } # header is used because wiki pedia was considering it as bot with "User-Agent: python-requests/2.x"
+
+        response = requests.get(url=url, headers = headers).content
+        # print(response)
+        soup = BeautifulSoup(response, 'lxml') # second one is parser - html, lxml
+        tag = soup.find("div", {"id": "mp-right"}) # name of the tag
+
+        # h = tag.find("h2", {"id":"mp-itn-h2"})
+        h = tag.find_all("h2") # prints all h2 data under "div (tag)"
+        # h = tag.find("h2", {"id":"mp-itn-h2"}).find(...) # prints selected find data inside the h2.
+        # print(h)
+        content = [span.text for span in h]
+        print(content) # prints only the header.
+
+    Extract(url = 'https://en.wikipedia.org/wiki/Main_Page')
+
+11. To export in CSV file.
+    - import csv
+    - Append the following line:
+            with open('wiki.csv', 'w') as f: # creates a file
+                csv_writer = csv.writer(f) # Enables the file
+                csv_writer.writerow(content) # Write the content of content variable above in csv file.
+
+
+
+
+
+
+
+
+
+
