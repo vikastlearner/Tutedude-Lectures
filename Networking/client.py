@@ -1,0 +1,46 @@
+import   socket
+from tkinter import *
+
+root = Tk()
+root.title("Client")
+root.minsize(400, 400)
+
+def send(listbox, entry):
+    message = entry.get()
+    listbox.insert("end", "Client: "+message)
+    entry.delete(0, END)
+    s.send(bytes(message, "utf-8"))
+    receive(listbox)
+
+def receive(listbox):
+    message = s.recv(50)
+    listbox.insert("end", "Server: "+message.decode("utf-8"))
+
+label1 = Label(root,text="Vikas-Chatbox", font=("Arial", 12))
+label1.pack()
+
+listbox = Listbox(root)
+listbox.pack()
+
+label2 = Label(root,text="Type Message", font=("Arial", 10))
+label2.pack()
+
+entry = Entry()
+entry.pack()
+
+button = Button(root,text="SEND", command=lambda :send(listbox, entry))
+button.pack()
+
+rbutton = Button(root,text="RECEIVE", command=lambda :receive(listbox))
+rbutton.pack()
+
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+HOST = socket.gethostname()
+port = 8010
+
+s.connect((HOST, port))
+
+root.mainloop()
+
